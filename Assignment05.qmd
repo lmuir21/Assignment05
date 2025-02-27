@@ -2,13 +2,12 @@
 title: "WDI Data Exploratory Analysis"
 subtitle: "QTM 350 Problem Set 05"
 author: "Liane Muir"
-data: "2025-02-25"
+date: "2025-02-25"
 format:
   html: default
   pdf: default
 bibliography: references.bib
 output-dir: docs
-
 ---
 
 ## Exploratory Analysis
