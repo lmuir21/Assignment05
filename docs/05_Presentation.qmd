@@ -1,0 +1,200 @@
+---
+title: "WDI Exploratory Analysis"
+author: "Liane Muir"
+date: "2025-02-25"
+format:
+  revealjs:
+    slide-level: 2
+    theme: moon
+    transition: slide
+    scrollable: true
+    code-line-numbers: true
+    embed-resources: true
+    footer: "Footer text"
+editor:
+  render-on-save: true
+---
+
+## Selection of Indicators
+
+I chose three indicators to analyze from the World Development Indicators (WDI) dataset:
+
+:::{.incremental}
+- Inflation Rate
+- Life Expectancy
+- GDP per Capita
+:::
+
+:::{.fragment .fade-in}
+These indicators are respectively considered measures of economic stability, health, and economic prosperity.  
+:::
+
+## Summary Statistics
+
+The distribution of our key economic and health indicators across 217 countries in 2022:
+
+```{python}
+#| echo: false
+#| fig-cap: "Distribution of key economic and health indicators. This figure shows the distribution of three indicators across countries in 2022. The density curves help elucidate overall trends. Note skews in the distributions."
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+df = pd.read_csv("wdi.csv")
+
+# Select relevant columns for analysis
+selected_columns = ["inflation_rate", "life_expectancy", "gdp_per_capita"]
+df_selected = df[selected_columns]
+
+# Set Seaborn style
+sns.set_style("whitegrid")
+
+# Histograms for distribution analysis
+fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+for ax, col in zip(axes, selected_columns):
+    title = col.replace('_', ' ').title()
+    if col == "gdp_per_capita":
+        title = title.upper()
+    sns.histplot(df[col].dropna(), bins=20, kde=True, ax=ax)
+    ax.set_title(f"Distribution of {title}")
+    ax.set_xlabel(title)
+
+plt.tight_layout()
+plt.show()
+```
+
+## Summary Statistics Cont.
+
+:::{.fragment .fade-in}
+Summary statistics for our indicator variables:
+
+```{python}
+#| echo: false
+#| output: asis
+
+import pandas as pd
+
+# Load the dataset
+df = pd.read_csv("wdi.csv")
+
+# Select relevant columns for analysis
+selected_columns = ["inflation_rate", "life_expectancy", "gdp_per_capita"]
+df_selected = df[selected_columns]
+
+# Calculate key statistics
+key_stats = df_selected.describe().T
+key_stats = key_stats[['mean', 'std', 'min', '25%', '50%', '75%', 'max']]
+key_stats.columns = ['Mean', 'Standard Deviation', 'Min', '25th Percentile', 'Median', '75th Percentile', 'Max']
+
+# Rename rows for better clarity
+key_stats.index = ['Inflation Rate (%)', 'Life Expectancy (Years)', 'GDP per Capita (USD)']
+
+# Convert the DataFrame to a Markdown table
+print(key_stats.to_markdown())
+```
+:::
+
+:::{.fragment .fade-in-then-out}
+The histogram for Inflation Rate had a right-skewed distribution, showing that most countries have inflation rates below 15%. The range of values goes from -6.69% (deflation) to 171.2% (hyperinflation).
+
+Let's take a closer look at the number of countries in each inflation category.
+:::
+
+## Exploratory Analysis 
+
+As we see in the figure below, the highest number of countries are in the "Elevated Inflation" category:
+
+```{python}
+#| echo: false
+#| fig-cap: "Bar plot showing the number of countries by inflation category. This figure provides a detailed count of the number of countries within each inflation rate category."
+#| label: fig-barplot
+
+# Define inflation categories
+def categorize_inflation(rate):
+    if rate < 2:
+        return "Low Inflation (<2%)"
+    elif 2 <= rate <= 5:
+        return "Moderate Inflation (2-5%)"
+    elif 5 < rate <= 10:
+        return "Elevated Inflation (5-10%)"
+    elif 10 < rate <= 50:
+        return "High Inflation (10-50%)"
+    else:
+        return "Hyperinflation (>50%)"
+
+# Apply categorization
+df["inflation_category"] = df["inflation_rate"].apply(lambda x: categorize_inflation(x) if pd.notnull(x) else "Missing Data")
+
+# Count occurrences of each category
+inflation_counts = df["inflation_category"].value_counts()
+
+# Reorder categories for plotting
+category_order = ["Low Inflation (<2%)", "Moderate Inflation (2-5%)", "Elevated Inflation (5-10%)", "High Inflation (10-50%)", "Hyperinflation (>50%)", "Missing Data"]
+inflation_counts = inflation_counts.reindex(category_order)
+
+# Convert the Series to a DataFrame for better formatting
+inflation_counts_df = inflation_counts.reset_index()
+inflation_counts_df.columns = ["Inflation Category", "Number of Countries"]
+
+# Bar Plot: Number of Countries by Inflation Category
+plt.figure(figsize=(10, 6))
+sns.barplot(x="Inflation Category", y="Number of Countries", data=inflation_counts_df, palette="viridis", hue="Inflation Category", dodge=False, legend=False)
+plt.title("Number of Countries by Inflation Category", fontsize=16)
+plt.xlabel("Inflation Category", fontsize=14)
+plt.ylabel("Number of Countries", fontsize=14)
+plt.xticks(rotation=45, fontsize=12)
+plt.yticks(fontsize=12)
+plt.tight_layout()
+plt.show()
+``` 
+
+## Exploratory Analysis Cont. 
+
+So what are the relationships between these indicators? 
+Is there a relationship between GDP per Capita (economic prosperity) and life expectancy (overall population health)? Let's see.
+
+:::{.fragment .fade-in}
+```{python}
+#| echo: false
+#| fig-cap: "Scatter plot of GDP per Capita vs Life Expectancy. This figure shows the relationship between GDP per Capita and Life Expectancy across countries, categorized by inflation rates. A log scale is used for GDP per Capita to better visualize the wide range of values. The regression line illustrates the overall trend and relationship between GDP and life expectancy. Data source: [World Development Indicators](https://databank.worldbank.org/source/world-development-indicators)."
+#| label: fig-scatter
+
+# Scatter Plot: GDP per Capita vs Life Expectancy
+plt.figure(figsize=(12, 8))
+sns.scatterplot(data=df, x="gdp_per_capita", y="life_expectancy", alpha=0.7, hue="inflation_category", palette="viridis", hue_order=category_order)
+plt.xscale("log")  # Log scale for better visualization
+plt.title("GDP per Capita vs Life Expectancy", fontsize=16)
+plt.xlabel("GDP per Capita (log scale, USD)", fontsize=14)
+plt.ylabel("Life Expectancy (Years)", fontsize=14)
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+plt.grid(True, which="major", linestyle='--', linewidth=0.5)  # Limit grid lines to major ticks
+plt.legend(title="Inflation Category", bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=12, title_fontsize=14)
+
+# Add a regression line
+sns.regplot(data=df, x="gdp_per_capita", y="life_expectancy", scatter=False, color="blue", logx=True)
+
+# Set labels again after regplot
+plt.xlabel("GDP per Capita (log scale, USD)", fontsize=14)
+plt.ylabel("Life Expectancy (Years)", fontsize=14)
+
+plt.show()
+```
+:::
+
+## Exploratory Analysis Summary
+
+- Inflation Rates: The distribution is right-skewed, with most countries experiencing moderate to elevated inflation (2–10%). A small subset faces hyperinflation (>50%).
+- Life Expectancy: Most countries cluster around 70–80 years, with a global average of 72.4 years. Higher life expectancy is observed in wealthier nations.
+- GDP per Capita: Strongly right-skewed, indicating economic disparity. A few high-income countries significantly raise the average.
+
+**Key Insights**:
+
+- Countries with higher GDP per capita tend to have higher life expectancy (positive correlation).
+- Inflation trends vary widely, with some nations facing extreme economic instability.
+- Economic growth is strongly linked to better health outcomes, aligning with global research.
+
+# Thank You!
