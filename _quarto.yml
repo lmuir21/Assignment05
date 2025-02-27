@@ -3,10 +3,8 @@ project:
   output-dir: docs
 
 format:
-  html:
-    output-dir: docs
-  pdf:
-    output-dir: docs
+  html: default
+  pdf: default
 
 
 

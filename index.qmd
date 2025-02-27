@@ -5,8 +5,8 @@ format: html
 
 The World Development Indicators (WDI) dataset contains information about various economic and health indicators across 217 countries in 2022.
 
-Presentation: [WDI Data Analysis Presentation](docs/Presentation.html)
+Presentation: [WDI Data Analysis Presentation](Presentation.html)
 
-Report HTML: [WDI Data Analysis Report](docs/Assignment05.html)
+Report HTML: [WDI Data Analysis Report](Assignment05.html)
 
-Report PDF: [WDI Data Analysis Report PDF](docs/Assignment05.pdf)
+Report PDF: [WDI Data Analysis Report PDF](Assignment05.pdf)

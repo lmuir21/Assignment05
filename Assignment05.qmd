@@ -5,7 +5,7 @@ author: "Liane Muir"
 date: "2025-02-25"
 format:
   html:
-    theme: cosmo  # You can choose any supported theme
+    theme: cosmo
   pdf: default
 bibliography: references.bib
 ---
