@@ -4,7 +4,8 @@ subtitle: "QTM 350 Problem Set 05"
 author: "Liane Muir"
 date: "2025-02-25"
 format:
-  html: default
+  html:
+    theme: cosmo  # You can choose any supported theme
   pdf: default
 bibliography: references.bib
 ---
