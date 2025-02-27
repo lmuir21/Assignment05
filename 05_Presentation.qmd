@@ -13,7 +13,6 @@ format:
     footer: "Footer text"
 editor:
   render-on-save: true
-output-dir: docs 
 ---
 
 ## Selection of Indicators

@@ -7,7 +7,6 @@ format:
   html: default
   pdf: default
 bibliography: references.bib
-output-dir: docs
 ---
 
 ## Exploratory Analysis
