@@ -5,8 +5,6 @@ format: html
 
 The World Development Indicators (WDI) dataset contains information about various economic and health indicators across 217 countries in 2022.
 
-Explore the relationship between life expectancy and GDP per capita: [Life Expectancy and GDP per Capita](05_Presentation.qmd)
+Presentation: [WDI Data Analysis Presentation](05_Presentation.qmd)
 
-Explore the relationship between inflation rate and GDP per capita: [Inflation Rate and GDP per Capita](Assignment05.qmd)
-
-Analyze changes in key economic and health indicators for a specific country: [Country Analysis](country.qmd)
+Report: [WDI Data Analysis Report](Assignment05.qmd)
