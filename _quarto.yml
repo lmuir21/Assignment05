@@ -5,7 +5,9 @@ project:
 format:
   html:
     output-dir: docs
-  pdf: default
+  pdf:
+    output-dir: docs
+
 
 
 

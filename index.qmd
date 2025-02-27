@@ -7,4 +7,6 @@ The World Development Indicators (WDI) dataset contains information about variou
 
 Presentation: [WDI Data Analysis Presentation](docs/Presentation.html)
 
-Report: [WDI Data Analysis Report](docs/Assignment05.html)
+Report HTML: [WDI Data Analysis Report](docs/Assignment05.html)
+
+Report PDF: [WDI Data Analysis Report PDF](docs/Assignment05.pdf)
