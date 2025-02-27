@@ -5,6 +5,8 @@ This repository contains the code for Assignment 05. Below are the links to the 
 - [Presentation](https://lmuir21.github.io/Assignment05/Presentation.html)
 - [HTML Report](https://lmuir21.github.io/Assignment05/Assignment05.html)
 
+The repository also contains the QMD files for the report and presentation. The report QMD file is named "Assignment05.qmd".
+
 ## Analysis Summary
 
 ### Exploratory Analysis
